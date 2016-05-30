@@ -1,4 +1,5 @@
-import sys
+from math  import sqrt,ceil , log
+import itertools
 class MillerRabinTest():
     def isPrime(self,n,primes,Max):
      if n <= Max:
@@ -22,7 +23,7 @@ class MillerRabinTest():
          else: return False
      return True
 
-    def isPrime2(self,start, end, prims):
+    def isPrime2(self,start, end, prims,Pri):
         if end == 2: return 2
   
         n = start
@@ -33,11 +34,10 @@ class MillerRabinTest():
       
 
         v, d, e = int(ceil(log(m,2))) + 2, m, 1
-        
-        cent_primes = [3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]
+ 
 
         if n <= 100 or m <= 100:
-            for i in cent_primes:
+            for i in Pri:
                 if i < n: continue
                 if i > m: break
                 primes = primes + 1
@@ -62,7 +62,7 @@ class MillerRabinTest():
                 p += f
                 z = p % 6
                 if z != 1 and z != 5: continue
-                for prime in cent_primes:
+                for prime in Pri:
                     if p % prime == 0:
                         break
                 else:
