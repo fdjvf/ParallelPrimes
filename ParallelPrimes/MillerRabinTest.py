@@ -26,12 +26,12 @@ class MillerRabinTest():
             f, p = e << 1, -e
             
             h = int(ceil((n - e) / f)) + 1 
-            p += h * f + 1
+            p = p + h * f + 1
 
             rng = xrange(1, s)
             
             for r in xrange((h * 2) + 1, d + 1, 2):
-                p += f
+                p = p + f
                 z = p % 6
                 if z != 1 and z != 5: continue
                 for prime in Pri:
@@ -48,5 +48,5 @@ class MillerRabinTest():
                         else:
                             break
                     else:
-                        primes = primes + 1    
+                        primes = primes + 1
         return primes
