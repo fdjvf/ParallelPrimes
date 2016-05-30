@@ -25,10 +25,11 @@ class MillerRabinTest():
      return True
  
     def isPrime2(self,start, end, prims):
-        if end == 2: return 1  
+        if end == 2: return 1 
+        if end < 2: return 0 
         n = start
         m = end - (end + 1) % 2       
-        if m < 2: return 1
+        if m < 2: return 0
 
         primes = 0
         v, d, e = int(ceil(log(m,2))) + 2, m, 1
@@ -75,6 +76,6 @@ class MillerRabinTest():
                             break
                     else:
                         primes = primes + 1
-        if (start) <= 2: primes = 1
+        if (start) <= 2: primes += 1
      
         return primes
