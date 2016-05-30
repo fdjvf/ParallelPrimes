@@ -2,9 +2,6 @@ from mpi4py import MPI
 from MillerRabinTest import MillerRabinTest
 from sys import  argv
 from time import time
-from itertools import tee, ifilter
-
-
 
 comm = MPI.COMM_WORLD
 IdProcess = comm.Get_rank() #Id Del Proceso
@@ -40,7 +37,7 @@ if IdProcess == 0:
         Primes = range(2, 42, 1)
         Primes = filter(lambda x: (x % 2 != 0 or x == 2) and (x % 3 != 0 or x == 3) and (x % 5 != 0 or x == 5), Primes)
 else:
- Primes = None
+    Primes = None
     Pri = None
 
 Primes = comm.bcast(Primes, root=0) 
