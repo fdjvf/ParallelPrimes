@@ -10,6 +10,7 @@ comm = MPI.COMM_WORLD
 IdProcess = comm.Get_rank()  #Id Del Proceso
 M = comm.Get_size()#Numero de Procesos
 N = int(sys.argv[1]) #Numero de digitos
+
 start = time()
 
 if IdProcess == 0:     
@@ -51,7 +52,7 @@ if IdProcess == 0:
     if(N != 1):
         R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
     else:
-        R = xrange(1, 9)        
+        R = xrange(1, 10)        
 else: R = None
 
 R = comm.bcast(R, root=0)   
@@ -60,7 +61,7 @@ H = Size / M
 Mod = Size % M
 Lower = R[H * IdProcess]
 if IdProcess == M - 1:
-    Upper = R[H * (IdProcess + 1) - 1 + Mod]
+    Upper = R[-1]
 else:   
     Upper = R[H * (IdProcess + 1) - 1] 
 
