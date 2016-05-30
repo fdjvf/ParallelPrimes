@@ -15,7 +15,7 @@ class MillerRabinTest():
         v, d, e = int(ceil(log(m,2))) + 2, m, 1
  
 
-        if n <= 100 or m <= 100:
+        if n <= 104 or m <= 104:
             for i in Pri:
                 if i < n: continue
                 if i > m: break
