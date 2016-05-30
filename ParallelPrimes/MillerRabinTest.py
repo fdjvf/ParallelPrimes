@@ -1,4 +1,6 @@
 import sys
+from random import randint
+from math import sqrt, ceil, floor, log
 class MillerRabinTest():
     def isPrime(self,n,primes,Max):
      if n <= Max:
@@ -21,17 +23,14 @@ class MillerRabinTest():
              y = pow(y,2,n)
          else: return False
      return True
-
+ 
     def isPrime2(self,start, end, prims):
-        if end == 2: return 2
-  
+        if end == 2: return 1  
         n = start
         m = end - (end + 1) % 2       
         if m < 2: return 1
 
         primes = 0
-      
-
         v, d, e = int(ceil(log(m,2))) + 2, m, 1
         
         cent_primes = [3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]
@@ -40,12 +39,11 @@ class MillerRabinTest():
             for i in cent_primes:
                 if i < n: continue
                 if i > m: break
-                primes = primes + 1
+                primes = primes + 1 #If n<=i<=m ||| i in [n,m]
 
         if n <= 1: n = 2
 
         n = n - 1
-
         if n % 2 == 0: n = n - 1
 
         for s in xrange(2,v):
@@ -65,15 +63,11 @@ class MillerRabinTest():
                 for prime in cent_primes:
                     if p % prime == 0:
                         break
-                else:
-                    
-                    o = p - 1
-             
+                else:                    
+                    o = p - 1             
                     for i in prims:
-                        y = pow(i,r,p)
-            
-                        if y == 1: continue
-                    
+                        y = pow(i,r,p)            
+                        if y == 1: continue                    
                         for j in rng:
                             if y == o: break
                             y = pow(y,2,p)
@@ -84,5 +78,3 @@ class MillerRabinTest():
         if (start) <= 2: primes = 1
      
         return primes
- 
-

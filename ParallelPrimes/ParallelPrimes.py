@@ -45,7 +45,7 @@ if IdProcess == 0:
     if(N != 1):
         R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
     else:
-        R = xrange(1, 9)        
+        R = xrange(1, 10)        
 else: R = None
 
 R = comm.bcast(R, root=0)   
