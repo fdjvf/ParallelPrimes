@@ -47,30 +47,6 @@ if N < 1:
   if IdProcess == 0: print "Error, Numero de digitos invalido"
 if N == 1:
     Total = len(filter(lambda x:(x % 2 != 0 or x == 2) ,xrange(2,8)))
-#elif N <= 9:
-#    Primes,Pri = Initialize()
-#    Primes = comm.bcast(Primes, root=0) 
-#    Pri = comm.bcast(Pri, root=0)
-#    Y = MillerRabinTest()
-
-#    if IdProcess == 0:    
-#        R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
-#        Size = len(R)
-#        H = Size / M
-#    else: 
-#       R = None 
-#       H = None
-
-#    R = comm.bcast(R, root=0)   
-#    H = comm.bcast(H, root=0)   
-#    Lower = R[H * IdProcess]
-#    if IdProcess == M - 1:
-#       Upper = R[-1]
-#    else:   
-#       Upper = R[H * (IdProcess + 1) - 1] 
-
-#    Result = Y.isPrime2(Lower,Upper,Primes,Pri)
-#    Total = comm.reduce(Result,op=MPI.SUM)
 else:
     Primes, Pri = Initialize()
     Primes = comm.bcast(Primes, root=0)
@@ -94,9 +70,7 @@ else:
     else:
         Upper = end - 1
 
-    Result = Y.isPrime2(int(Lower),int(Upper),Primes,Pri)
-    print 'proc',IdProcess,'low',Lower,'up',Upper,'res',Result
-    print '--'
+    Result = Y.isPrime2(long(Lower),long(Upper),Primes,Pri)
     Total = comm.reduce(Result,op=MPI.SUM)
 if IdProcess == 0 and N >= 1:     
     print 'El numero de primos de ', N, ' digitos es ', Total , '\nTiempo: ', clock()
