@@ -1,16 +1,16 @@
 from mpi4py import MPI
 from MillerRabinTest import MillerRabinTest
 from sys import  argv
-from time import time
+from time import clock
 
 comm = MPI.COMM_WORLD
 IdProcess = comm.Get_rank()  #Id Del Proceso
 M = comm.Get_size()#Numero de Procesos
 N = int(argv[1]) #Numero de digitos
-start = time()
+clock()
 
-if N==1:
-    Total=len(filter(lambda x:(x % 2 != 0 or x == 2) ,xrange(2,8)))
+if N == 1:
+    Total = len(filter(lambda x:(x % 2 != 0 or x == 2) ,xrange(2,8)))
 else:
      if IdProcess == 0:     
         Pri = xrange(2,104,1)
@@ -42,30 +42,22 @@ else:
             Primes = filter(lambda x: (x % 2 != 0 or x == 2) and (x % 3 != 0 or x == 3) and (x % 5 != 0 or x == 5),Primes)
      else:
        Primes = None
-       Pri=None
+       Pri = None
      Primes = comm.bcast(Primes, root=0) 
      Pri = comm.bcast(Pri, root=0)
      Y = MillerRabinTest()
-     if IdProcess == 0:    
-        if(N != 1):
-            R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
-        else:
-            R = xrange(1, 9)        
-     else: R = None
+     start = 10 ** (N - 1) + 1
+     end = 10 ** N
 
-     R = comm.bcast(R, root=0)   
-     Size = len(R)
+     Size = 1 + (end - 1 - start) // 2
      H = Size / M
-     Lower = R[H * IdProcess]
-     if IdProcess == M - 1:
-        Upper = R[-1]
-     else:   
-        Upper = R[H * (IdProcess + 1) - 1] 
+     Lower = start + IdProcess * H
+     if IdProcess != M - 1:
+         Upper = Lower + H - 1
+     else:
+         Upper = end - 1
 
      Result = Y.isPrime2(Lower,Upper,Primes,Pri)
      Total = comm.reduce(Result,op=MPI.SUM)
 if IdProcess == 0:     
-    print 'El numero de primos de ' ,N ,' digitos es ' ,Total  ,'\nTiempo: ', time() - start
-
-
-
+    print 'El numero de primos de ' ,N ,' digitos es ' ,Total  ,'\nTiempo: ', clock()
