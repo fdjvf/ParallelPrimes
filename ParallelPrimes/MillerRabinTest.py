@@ -20,9 +20,11 @@ class MillerRabinTest():
         n = n - 1
         if n % 2 == 0: n = n - 1
 
-        for s in xrange(2, v):
-            d >>= 1
-            e <<= 1
+        #for s in xrange(2, v):
+        s = 2
+        while s < v:
+            d = d >> 1
+            e = e << 1
             f, p = e << 1, -e
             
             h = int(ceil((n - e) / f)) + 1 
@@ -30,7 +32,10 @@ class MillerRabinTest():
 
             rng = xrange(1, s)
             
-            for r in xrange((h * 2) + 1, d + 1, 2):
+            #for r in xrange((h * 2) + 1, d + 1, 2):
+            r = (h * 2) + 1 - 2
+            while r < d + 1 - 2:
+                r = r + 2
                 p = p + f
                 z = p % 6
                 if z != 1 and z != 5: continue
@@ -48,5 +53,6 @@ class MillerRabinTest():
                         else:
                             break
                     else:
-                        primes = primes + 1
+                        primes = primes + 1                
+            s = s + 1
         return primes
