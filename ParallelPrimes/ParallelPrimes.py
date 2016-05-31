@@ -36,65 +36,67 @@ def Initialize():
   else:
        Primes = None
        Pri = None
-  return Primes,Pri
+  return Primes, Pri
       
 comm = MPI.COMM_WORLD
 IdProcess = comm.Get_rank()  #Id Del Proceso
 M = comm.Get_size()#Numero de Procesos
 N = int(argv[1]) #Numero de digitos
 clock()
-if N<1:
-  if IdProcess==0: print "Error, Numero de digitos invalido"
+if N < 1:
+  if IdProcess == 0: print "Error, Numero de digitos invalido"
 if N == 1:
     Total = len(filter(lambda x:(x % 2 != 0 or x == 2) ,xrange(2,8)))
-elif N<=9:
-    Primes,Pri=Initialize()
-    Primes = comm.bcast(Primes, root=0) 
+#elif N <= 9:
+#    Primes,Pri = Initialize()
+#    Primes = comm.bcast(Primes, root=0) 
+#    Pri = comm.bcast(Pri, root=0)
+#    Y = MillerRabinTest()
+
+#    if IdProcess == 0:    
+#        R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
+#        Size = len(R)
+#        H = Size / M
+#    else: 
+#       R = None 
+#       H = None
+
+#    R = comm.bcast(R, root=0)   
+#    H = comm.bcast(H, root=0)   
+#    Lower = R[H * IdProcess]
+#    if IdProcess == M - 1:
+#       Upper = R[-1]
+#    else:   
+#       Upper = R[H * (IdProcess + 1) - 1] 
+
+#    Result = Y.isPrime2(Lower,Upper,Primes,Pri)
+#    Total = comm.reduce(Result,op=MPI.SUM)
+else:
+    Primes, Pri = Initialize()
+    Primes = comm.bcast(Primes, root=0)
     Pri = comm.bcast(Pri, root=0)
     Y = MillerRabinTest()
+    if IdProcess == 0:
+        start = pow(10, (N - 1)) + 1
+        end = pow(10, N)
+        Size = 1 + (end - 1 - start) // 2
+        H = Size // M
+    else:
+        start = None
+        H = None
+        end = None
+    start = comm.bcast(start, root=0)
+    H = comm.bcast(H, root=0)
+    end = comm.bcast(end, root=0)
+    Lower = start + 2 * IdProcess * H
+    if IdProcess != M - 1:
+        Upper = Lower + 2 * H - 2
+    else:
+        Upper = end - 1
 
-    if IdProcess == 0:    
-        R = xrange((10 ** (N - 1)) + 1, 10 ** N, 2)    
-        Size = len(R)
-        H = Size / M
-    else: 
-       R = None 
-       H=None
-
-    R = comm.bcast(R, root=0)   
-    H = comm.bcast(H, root=0)   
-    Lower = R[H * IdProcess]
-    if IdProcess == M - 1:
-       Upper = R[-1]
-    else:   
-       Upper = R[H * (IdProcess + 1) - 1] 
-
-    Result = Y.isPrime2(Lower,Upper,Primes,Pri)
+    Result = Y.isPrime2((Lower),int(Upper),Primes,Pri)
+    #print 'proc',IdProcess,'low',Lower,'up',Upper,'res',Result
+    #print '--'
     Total = comm.reduce(Result,op=MPI.SUM)
-else:
-     Primes,Pri=Initialize()
-     Primes = comm.bcast(Primes, root=0) 
-     Pri = comm.bcast(Pri, root=0)
-     Y = MillerRabinTest()
-     if IdProcess==0:    
-      start = pow(10 ,(N - 1)) + 1    
-      end = pow(10 ,N) 
-      Size = 1 + (end - 1 - start) // 2
-      H = Size / M
-     else: 
-      start=None 
-      H=None
-      end=None
-     start = comm.bcast(start, root=0) 
-     H= comm.bcast(H, root=0)
-     end= comm.bcast(end, root=0)
-     Lower = start + IdProcess * H
-     if IdProcess != M - 1:
-         Upper = Lower + H - 1
-     else:
-         Upper = end - 1
-
-     Result = Y.isPrime2(int(Lower),int(Upper),Primes,Pri)
-     Total = comm.reduce(Result,op=MPI.SUM)
-if IdProcess == 0 and N>=1:     
-    print 'El numero de primos de ' ,N ,' digitos es ' ,Total  ,'\nTiempo: ', clock()
+if IdProcess == 0 and N >= 1:     
+    print 'El numero de primos de ', N, ' digitos es ', Total , '\nTiempo: ', clock()
