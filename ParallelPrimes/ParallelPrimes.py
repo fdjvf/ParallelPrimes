@@ -94,9 +94,9 @@ else:
     else:
         Upper = end - 1
 
-    Result = Y.isPrime2((Lower),int(Upper),Primes,Pri)
-    #print 'proc',IdProcess,'low',Lower,'up',Upper,'res',Result
-    #print '--'
+    Result = Y.isPrime2(int(Lower),int(Upper),Primes,Pri)
+    print 'proc',IdProcess,'low',Lower,'up',Upper,'res',Result
+    print '--'
     Total = comm.reduce(Result,op=MPI.SUM)
 if IdProcess == 0 and N >= 1:     
     print 'El numero de primos de ', N, ' digitos es ', Total , '\nTiempo: ', clock()
