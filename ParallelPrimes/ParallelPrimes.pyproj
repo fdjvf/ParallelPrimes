@@ -28,6 +28,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ParallelPrimes.py" />
+    <Compile Include="test.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
